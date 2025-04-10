@@ -6,6 +6,7 @@ import (
 	"internal/spentenergy"
 	"internal/personaldata"
 	"strconv"
+	"strings"
 )
 type DaySteps struct {
 	Steps int //количество шагов

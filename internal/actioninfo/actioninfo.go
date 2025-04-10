@@ -7,8 +7,8 @@ import (
 	"internal/trainings"
 )
 type DataParser interface {
-	daysteps.Parse(datastring string) error
-	trainings.ActionInfo() string, error
+	Parse(datastring string) error
+	ActionInfo() (string, error)
 }
 
 func Info(dataset []string, dp DataParser) {

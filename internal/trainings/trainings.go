@@ -30,7 +30,7 @@ func (t *Training) Parse(datastring string) (err error) {
 	}
 	t.Steps = steps
 	t.TrainingType = dataSlise[1]
-	duration, err := time.ParseDuration(strings.Replace(dataSlise[3], "h", "h", 1))
+	duration, err := time.ParseDuration(strings.Replace(dataSlise[2], "h", "h", 1))
 	if err != nil {
 		return fmt.Errorf("conversion time error: %w", err)
 	}
@@ -49,7 +49,7 @@ func (t Training) ActionInfo() (string, error) {
 	case "Бег":
 		distance = spentenergy.Distance(t.Steps, t.Height)
 		meanSpeed = spentenergy.MeanSpeed(t.Steps, t.Height, t.Duration)
-		calories, err = spentenergy.RunningSpentCalories(t.Steps, t.Weight, t.Height, t.Duration), err
+		calories, err = spentenergy.RunningSpentCalories(t.Steps, t.Weight, t.Height, t.Duration)
 	default:
 		return "неизвестный тип тренировки", nil
 	}
