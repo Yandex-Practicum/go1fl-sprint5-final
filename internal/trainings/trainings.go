@@ -23,8 +23,6 @@ type calculatedInfo struct {
 }
 
 func (t *Training) Parse(datastring string) (err error) {
-	// TODO: реализовать функцию
-	// string format: "3456,Ходьба,3h00m"
 	slicedDatastring, err := splitDatastring(datastring)
 	if err != nil {
 		return err
@@ -36,9 +34,6 @@ func (t *Training) Parse(datastring string) (err error) {
 	}
 
 	t.TrainingType = slicedDatastring[1]
-	if err != nil {
-		return err
-	}
 
 	t.Duration, err = convertDuration(slicedDatastring[2])
 	if err != nil {
