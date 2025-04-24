@@ -18,6 +18,10 @@ type Training struct {
 	personaldata.Personal
 }
 
+type calculatedInfo struct {
+	distance, meanSpeed, spentCalories float64
+}
+
 func (t *Training) Parse(datastring string) (err error) {
 	// TODO: реализовать функцию
 	// string format: "3456,Ходьба,3h00m"
@@ -74,23 +78,49 @@ func convertDuration(duration string) (time.Duration, error) {
 }
 
 func (t Training) ActionInfo() (string, error) {
-	// TODO: реализовать функцию
 	distance := spentenergy.Distance(t.Steps, t.Height)
 	meanSpeed := spentenergy.MeanSpeed(t.Steps, t.Height, t.Duration)
-	var spentCalories float64
-	var err error
-	if t.TrainingType == "Бег" {
-		spentCalories, err = spentenergy.RunningSpentCalories(t.Steps, t.Weight, t.Height, t.Duration)
-	} else {
-		spentCalories, err = spentenergy.WalkingSpentCalories(t.Steps, t.Weight, t.Height, t.Duration)
+
+	spentCalories, err := t.spentCaloriesByTrainingType()
+	if err != nil {
+		return "", err
 	}
 
-	res := ""
-	res += fmt.Sprintf("Тип тренировки: %s\n", t.TrainingType)
-	res += fmt.Sprintf("Длительность: %.2f ч.\n", t.Duration.Hours())
-	res += fmt.Sprintf("Дистанция: %.2f км.\n", distance)
-	res += fmt.Sprintf("Скорость: %.2f км/ч\n", meanSpeed)
-	res += fmt.Sprintf("Сожгли калорий: %.2f\n", spentCalories)
+	calcInfo := calculatedInfo{
+		distance:      distance,
+		meanSpeed:     meanSpeed,
+		spentCalories: spentCalories,
+	}
 
-	return "", nil
+	res := t.createInfoResult(calcInfo)
+
+	return res, nil
+}
+
+func (t *Training) spentCaloriesByTrainingType() (spentCalories float64, err error) {
+	switch t.TrainingType {
+	case "Бег":
+		spentCalories, err = spentenergy.RunningSpentCalories(t.Steps, t.Weight, t.Height, t.Duration)
+	case "Ходьба":
+		spentCalories, err = spentenergy.WalkingSpentCalories(t.Steps, t.Weight, t.Height, t.Duration)
+	default:
+		err = errors.New("wrong training type")
+	}
+
+	return spentCalories, err
+}
+
+func (t *Training) createInfoResult(calcInfo calculatedInfo) string {
+	res := fmt.Sprintf("Тип тренировки: %s\n"+
+		"Длительность: %.2f ч.\n"+
+		"Дистанция: %.2f км.\n"+
+		"Скорость: %.2f км/ч\n"+
+		"Сожгли калорий: %.2f\n",
+		t.TrainingType,
+		t.Duration.Hours(),
+		calcInfo.distance,
+		calcInfo.meanSpeed,
+		calcInfo.spentCalories)
+
+	return res
 }
