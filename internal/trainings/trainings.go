@@ -28,14 +28,14 @@ func (t *Training) Parse(datastring string) (err error) {
 		return err
 	}
 
-	t.Steps, err = convertSteps(slicedDatastring[0])
+	t.Steps, err = parseSteps(slicedDatastring[0])
 	if err != nil {
 		return err
 	}
 
 	t.TrainingType = slicedDatastring[1]
 
-	t.Duration, err = convertDuration(slicedDatastring[2])
+	t.Duration, err = parseDuration(slicedDatastring[2])
 	if err != nil {
 		return err
 	}
@@ -52,7 +52,7 @@ func splitDatastring(datastring string) ([]string, error) {
 	return slicedDatastring, nil
 }
 
-func convertSteps(steps string) (int, error) {
+func parseSteps(steps string) (int, error) {
 	newSteps, err := strconv.Atoi(steps)
 
 	if newSteps <= 0 {
@@ -62,7 +62,7 @@ func convertSteps(steps string) (int, error) {
 	return newSteps, err
 }
 
-func convertDuration(duration string) (time.Duration, error) {
+func parseDuration(duration string) (time.Duration, error) {
 	newDuration, err := time.ParseDuration(duration)
 
 	if newDuration <= 0 {
