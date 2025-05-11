@@ -5,6 +5,7 @@ import (
 	"log"
 )
 
+// Парсинг
 type DataParser interface {
 	Parse(datastring string) error
 	ActionInfo() (string, error)
