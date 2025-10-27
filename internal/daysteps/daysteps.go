@@ -14,30 +14,35 @@ import (
 type DaySteps struct {
 	// TODO: добавить поля
 	Steps    int
-	duration time.Duration
+	Duration time.Duration
 	personaldata.Personal
 }
 
 func (ds *DaySteps) Parse(datastring string) (err error) {
+
 	// TODO: реализовать функцию
-	parts := strings.Split(datastring,",")
+
+	if len(datastring) < 6 {
+		return fmt.Errorf("количесто символов меньше ожидаемого")
+	}
+	parts := strings.Split(datastring, ",")
 	if len(parts) != 2 {
-		return errors.New("должно быть две части")
+		return fmt.Errorf("некорректный формат данных: ожидается две части")
 	}
 	stepsInt, err := strconv.Atoi(parts[0])
 	if err != nil {
-		return err
+		return fmt.Errorf("ошибка подсчета количества шагов")
 	}
 	if stepsInt <= 0 {
-		return err
+		return fmt.Errorf("количество шагов должно быть положительным")
 	}
 	ds.Steps = stepsInt
-	ds.Duration, err := time.ParseDuration(strings.TrimSpace(parts[1]))
+	ds.Duration, err = time.ParseDuration(parts[1])
 	if err != nil {
-		return errors.New("ошибка парсинга продолжительности:" + err.Error())
+		return fmt.Errorf("ошибка парсинга продолжительности")
 	}
-	if ds.duration <= 0 {
-		return err
+	if ds.Duration <= 0 {
+		return fmt.Errorf("неверно задоно время")
 	}
 	return nil
 }
@@ -49,5 +54,5 @@ func (ds DaySteps) ActionInfo() (string, error) {
 	if err != nil {
 		return "", errors.New("некорректные данные")
 	}
-return fmt.Sprintf("Количество шагов: %d,\nДистанция составила %.2f км.\nВы сохгли %2.f ккал.\n", ds.Steps, distance, calories), nil
+	return fmt.Sprintf("Количество шагов: %d.\nДистанция составила %.2f км.\nВы сожгли %.2f ккал.\n", ds.Steps, distance, calories), nil
 }
