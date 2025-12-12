@@ -37,14 +37,14 @@ func (t *Training) Parse(datastring string) (err error) {
 	if err != nil {
 		return err
 	}
-
+	if steps <= 0 {
+		return errors.New("неверное количество шагов")
+	}
 	duration, err := time.ParseDuration(parts[2])
 	if err != nil {
 		return err
 	}
-	if steps <= 0 {
-		return errors.New("неверное количество шагов")
-	}
+
 	if duration <= 0 {
 		return errors.New("неверная продолжительность")
 	}
