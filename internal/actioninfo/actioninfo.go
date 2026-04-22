@@ -27,3 +27,5 @@ func Info(dataset []string, dp DataParser) {
 		fmt.Println(info)
 	}
 }
+
+// Sprint 5 solution
