@@ -62,4 +62,5 @@ func MeanSpeed(steps int, height float64, duration time.Duration) float64 {
 
 func Distance(steps int, height float64) float64 {
 	return height * stepLengthCoefficient * float64(steps) / mInKm
+
 }
