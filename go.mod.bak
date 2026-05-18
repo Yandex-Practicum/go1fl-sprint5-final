@@ -1,6 +1,10 @@
+]633;E;{    printf "module github.com/Sevacoming/go1fl-sprint5-final\\n\\n"\x3b   printf "go 1.21\\n\\n"\x3b   cat go.mod.bak\x3b } > go.mod;678ec801-e333-464d-8275-fc0b6bcb2e2d]633;Cmodule github.com/Sevacoming/go1fl-sprint5-final
+
+go 1.21
+
 module github.com/Yandex-Practicum/tracker
 
-go 1.22
+go 1.24.1
 
 require github.com/stretchr/testify v1.10.0
 
