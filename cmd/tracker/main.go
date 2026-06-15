@@ -58,3 +58,4 @@ func main() {
 
 	actioninfo.Info(actions, &trains)
 }
+// keep-main
