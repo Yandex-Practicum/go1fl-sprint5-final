@@ -20,18 +20,24 @@ type DaySteps struct {
 func (ds *DaySteps) Parse(datastring string) (err error) {
 	// TODO: реализовать функцию
 	sliceString := strings.Split(datastring, ",")
-
-	if len(sliceString) != 3 {
+	if len(sliceString) != 2 {
 		return fmt.Errorf("invalid data string: %s", datastring)
 	}
+
 	step, err := strconv.Atoi(sliceString[0])
 	if err != nil {
-		return fmt.Errorf("invalid ID: %s", sliceString[0])
+		return fmt.Errorf("invalid steps: %s", sliceString[0])
+	}
+	if step <= 0 {
+		return fmt.Errorf("invalid steps: %s", sliceString[0])
 	}
 	ds.Steps = step
 
 	duration, err := time.ParseDuration(sliceString[1])
 	if err != nil {
+		return fmt.Errorf("invalid duration: %s", sliceString[1])
+	}
+	if duration <= 0 {
 		return fmt.Errorf("invalid duration: %s", sliceString[1])
 	}
 	ds.Duration = duration
@@ -50,7 +56,7 @@ func (ds DaySteps) ActionInfo() (string, error) {
 		return "", err
 	}
 
-	result := fmt.Sprintf("Количество шагов: %d.\nДистанция составила %.2f км.\nВы сожгли %.2f ккал.",
+	result := fmt.Sprintf("Количество шагов: %d.\nДистанция составила %.2f км.\nВы сожгли %.2f ккал.\n",
 		ds.Steps, distance, calories)
 
 	return result, nil

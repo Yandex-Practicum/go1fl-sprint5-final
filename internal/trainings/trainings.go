@@ -29,13 +29,21 @@ func (t *Training) Parse(datastring string) (err error) {
 	if err != nil {
 		return fmt.Errorf("invalid ID: %s", sliceString[0])
 	}
+	if id <= 0 {
+		return fmt.Errorf("invalid ID: %d", id)
+	}
 	t.Steps = id
 
-	myTime, err := time.ParseDuration(sliceString[1])
+	myTime, err := time.ParseDuration(sliceString[2])
 	if err != nil {
-		return fmt.Errorf("invalid time: %s", sliceString[1])
+		return fmt.Errorf("invalid time: %s", sliceString[2])
+	}
+	if myTime <= 0 {
+		return fmt.Errorf("invalid time: %s", sliceString[2])
 	}
 	t.Duration = myTime
+
+	t.TrainingType = sliceString[1]
 
 	return nil
 }
@@ -61,7 +69,8 @@ func (t Training) ActionInfo() (string, error) {
 	} else {
 		return "", fmt.Errorf("неизвестный тип тренировки: %s", t.TrainingType)
 	}
+	durationHours := t.Duration.Hours()
 
-	return fmt.Sprintf("Тип тренировки: %s\n Длительность: %.2f ч.\n Дистанция: %.2f км.\n Скорость: %.2f км/ч\n Сожгли калорий: %.2f",
-		t.TrainingType, t.Duration, distance, speed, calories), nil
+	return fmt.Sprintf("Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %.2f\n",
+		t.TrainingType, durationHours, distance, speed, calories), nil
 }
