@@ -15,7 +15,7 @@ const (
 )
 
 func WalkingSpentCalories(steps int, weight, height float64, duration time.Duration) (float64, error) {
-	
+
 	if steps <= 0 {
 		return 0, errors.New("steps must be greater than zero")
 	}
@@ -42,7 +42,7 @@ func WalkingSpentCalories(steps int, weight, height float64, duration time.Durat
 }
 
 func RunningSpentCalories(steps int, weight, height float64, duration time.Duration) (float64, error) {
-	
+
 	if steps <= 0 {
 		return 0, errors.New("steps must be greater than zero")
 	}
