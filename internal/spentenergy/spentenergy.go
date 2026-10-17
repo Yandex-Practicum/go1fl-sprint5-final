@@ -1,6 +1,7 @@
 package spentenergy
 
 import (
+	"errors"
 	"time"
 )
 
@@ -13,17 +14,51 @@ const (
 )
 
 func WalkingSpentCalories(steps int, weight, height float64, duration time.Duration) (float64, error) {
-	// TODO: реализовать функцию
+	runningCalories, err := RunningSpentCalories(steps, weight, height, duration)
+	if err != nil {
+		return 0, err
+	}
+
+	return runningCalories * walkingCaloriesCoefficient, nil
 }
 
 func RunningSpentCalories(steps int, weight, height float64, duration time.Duration) (float64, error) {
-	// TODO: реализовать функцию
+	validateErr := validateParameters(steps, weight, height, duration)
+	if validateErr != nil {
+		return 0, validateErr
+	}
+	meanSpeed := MeanSpeed(steps, height, duration)
+
+	return (weight * meanSpeed * duration.Minutes()) / minInH, nil
 }
 
 func MeanSpeed(steps int, height float64, duration time.Duration) float64 {
-	// TODO: реализовать функцию
+	if duration <= 0 {
+		return 0
+	}
+	dist := Distance(steps, height)
+
+	return dist / duration.Hours()
 }
 
 func Distance(steps int, height float64) float64 {
-	// TODO: реализовать функцию
+	return float64(steps) * height * stepLengthCoefficient / mInKm
+}
+
+func validateParameters(steps int, weight, height float64, duration time.Duration) error {
+	errSuffix := "value must be positive"
+	if steps <= 0 {
+		return errors.New("steps " + errSuffix)
+	}
+	if weight <= 0 {
+		return errors.New("weight " + errSuffix)
+	}
+	if height <= 0 {
+		return errors.New("height " + errSuffix)
+	}
+	if duration <= 0 {
+		return errors.New("duration " + errSuffix)
+	}
+
+	return nil
 }
