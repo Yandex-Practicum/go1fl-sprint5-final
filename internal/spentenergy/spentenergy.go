@@ -1,6 +1,7 @@
 package spentenergy
 
 import (
+	"errors"
 	"time"
 )
 
@@ -13,17 +14,37 @@ const (
 )
 
 func WalkingSpentCalories(steps int, weight, height float64, duration time.Duration) (float64, error) {
-	// TODO: реализовать функцию
+	speed, err := RunningSpentCalories(steps, weight, height, duration)
+	return speed * walkingCaloriesCoefficient, err
 }
 
 func RunningSpentCalories(steps int, weight, height float64, duration time.Duration) (float64, error) {
-	// TODO: реализовать функцию
+	if steps <= 0 {
+		return 0, errors.New("количество шагов должно быть положительным")
+	}
+	if weight <= 0 {
+		return 0, errors.New("вес должен быть положительным")
+	}
+	if height <= 0 {
+		return 0, errors.New("рост должен быть положительным")
+	}
+	if duration <= 0 {
+		return 0, errors.New("продолжительность должна быть положительной")
+	}
+
+	return weight * MeanSpeed(steps, height, duration) * duration.Minutes() / minInH, nil
 }
 
 func MeanSpeed(steps int, height float64, duration time.Duration) float64 {
-	// TODO: реализовать функцию
+	if steps <= 0 || height <= 0 || duration.Nanoseconds() <= 0 {
+		return 0
+	}
+	return Distance(steps, height) / duration.Hours()
 }
 
 func Distance(steps int, height float64) float64 {
-	// TODO: реализовать функцию
+	if steps <= 0 || height <= 0 {
+		return 0
+	}
+	return height * stepLengthCoefficient * float64(steps) / mInKm
 }
